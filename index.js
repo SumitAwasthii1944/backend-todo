@@ -6,7 +6,7 @@ import cors from 'cors'
 import connectDB from './config/db.js';
 const app=express()
 app.use(cors({
-  origin:'http://localhost:5173',
+  origin:'https://backend-todo-sbg1.onrender.com',
   credentials:true
 }))
 app.use(express.json())
