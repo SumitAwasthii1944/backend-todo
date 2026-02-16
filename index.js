@@ -5,10 +5,21 @@ import express from 'express'
 import cors from 'cors'
 import connectDB from './config/db.js';
 const app=express()
+const allowedOrigins = [
+  "http://localhost:5173", 
+  "https://react-todo-six-taupe.vercel.app"
+];
+
 app.use(cors({
-  origin:'https://react-todo-six-taupe.vercel.app',
-  credentials:true
-}))
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);//callback(error, allow)
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json())
 
 app.use(userRouter)

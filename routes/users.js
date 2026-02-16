@@ -103,7 +103,7 @@ userRouter.get('/todos', userMiddleware, async function(req, res) {
     const creatorId = req.userId;
     const todos = await TodoModel.find({ userId: creatorId });
 
-    res.json({ 
+    res.json({ // Convert Mongoose documents to plain objects and ensure _id is a string
       todos: todos.map(todo => ({
         _id: todo._id.toString(),
         text: todo.text,
@@ -118,10 +118,10 @@ userRouter.get('/todos', userMiddleware, async function(req, res) {
     });
   }
 });
-userRouter.put('/todos/:id', userMiddleware, async function(req, res) {
+userRouter.put('/todos/:id', userMiddleware, async function(req, res) {// The :id in the route is a route parameter that represents the unique identifier of the todo item to be updated. When a request is made to this endpoint, the value of :id can be accessed in the request handler using req.params.id. This allows us to identify which specific todo item the user wants to update based on its unique identifier.
   try {
     const todoId = req.params.id;
-    const { text } = req.body;
+    const { text } = req.body;// The text variable is extracted from the request body, which contains the updated text for the todo item. This is the new value that the user wants to set for the todo item with the specified id.
     const creatorId = req.userId;
     
     if (!text) {
@@ -131,7 +131,7 @@ userRouter.put('/todos/:id', userMiddleware, async function(req, res) {
     }
     
     const todo = await TodoModel.findOneAndUpdate(
-      { _id: todoId, userId: creatorId },
+      { _id: todoId, userId: creatorId },//
       { text },
       { new: true }
     );
@@ -156,7 +156,7 @@ userRouter.put('/todos/:id', userMiddleware, async function(req, res) {
   }
 });
 
-userRouter.patch('/todos/toggle/:id', userMiddleware, async function(req, res) {
+userRouter.patch('/todos/toggle/:id', userMiddleware, async function(req, res) {// The :id in the route is a route parameter that represents the unique identifier of the todo item to be toggled. When a request is made to this endpoint, the value of :id can be accessed in the request handler using req.params.id. This allows us to identify which specific todo item the user wants to toggle based on its unique identifier.
   try {
     const todoId = req.params.id;
     const creatorId = req.userId;
@@ -170,7 +170,7 @@ userRouter.patch('/todos/toggle/:id', userMiddleware, async function(req, res) {
     }
     
     todo.completed = !todo.completed;
-    await todo.save();
+    await todo.save();// After toggling the completed status, we save the updated todo item back to the database using the save() method. This ensures that the changes are persisted in the database.
     
     res.json({
       _id: todo._id.toString(),
